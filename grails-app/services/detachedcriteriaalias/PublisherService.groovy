@@ -33,4 +33,19 @@ class PublisherService {
         }
         p
     }
+
+    def getAuthorsPublishers3(Author a) {
+        def subquery = new DetachedCriteria<Isbn>(Isbn).build {
+            createAlias("book", "book_alias0")
+            projections {
+                property("publisher")
+            }
+            'eq'("book_alias0.author", a)
+        }
+
+        def p = Publisher.createCriteria().list {
+            'in'("pubIdentifier", subquery)
+        }
+        p
+    }
 }

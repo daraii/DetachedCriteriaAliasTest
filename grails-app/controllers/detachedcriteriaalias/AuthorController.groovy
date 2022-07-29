@@ -18,6 +18,10 @@ class AuthorController {
         respond publisherService.getAuthorsPublishers2(author)
     }
 
+    def publishers3(Author author){
+        respond publisherService.getAuthorsPublishers3(author)
+    }
+
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
         respond authorService.list(params), model:[authorCount: authorService.count()]
