@@ -7,8 +7,7 @@ import grails.gorm.transactions.Transactional
 class PublisherService {
 
     def getAuthorsPublishers(Author a) {
-
-        def subquery = new DetachedCriteria<Isbn>(Isbn).build{
+        def subquery = new DetachedCriteria<Isbn>(Isbn).build {
             createAlias("book", "b")
             projections {
                 property("publisher")
@@ -16,18 +15,22 @@ class PublisherService {
             'eq'("b.author", a)
         }
 
-        def x = Publisher.createCriteria().list {
+        def p = Publisher.createCriteria().list {
             'in'("pubIdentifier", subquery)
         }
+        p
+    }
 
-//        Publisher.createCriteria().list {
-//            'in'("pubIdentifier", new DetachedCriteria<Book>(Book).build{
-//                createAlias("isbn", "i")
-//                projections {
-//                    property("i.publisher")
-//                }
-//                'eq'("author", a)
-//            })
-//        }
+    def getAuthorsPublishers2(Author a) {
+        def p = Publisher.createCriteria().list {
+            'in'("pubIdentifier", new DetachedCriteria<Book>(Book).build {
+                createAlias("isbn", "i")
+                projections {
+                    property("i.publisher")
+                }
+                'eq'("author", a)
+            })
+        }
+        p
     }
 }
